@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Everything you need for your stay at Stables Cottage, Torridon Estate — Wi-Fi, waste, safety, dining, and emergencies.">
+<title>Stables Cottage — Guest Guide · Torridon Estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--forest:#1A3A2E;--rust:#C97C5D;--linen:#F4EFE6;--linen2:#EDE6D9;--text:#1a1a18;--text2:#5a5a56;--text3:#8a8a84;--border:#ddd8cc;--white:#ffffff}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--linen);color:var(--text);line-height:1.6;font-size:16px}
+.hero{background:var(--forest);color:var(--white);padding:3rem 1.5rem 2.5rem;text-align:center}
+.hero-eyebrow{font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--rust);margin-bottom:6px}
+.hero-property{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:4px;font-weight:300;letter-spacing:.03em}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,42px);font-weight:400;line-height:1.2;margin-bottom:10px}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:2rem;font-weight:300}
+.hero-inner{max-width:600px;margin:0 auto}
+.hero-contact{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:0.5px solid rgba(255,255,255,.2);border-radius:100px;padding:8px 20px;font-size:14px;color:var(--white);text-decoration:none;transition:background .2s}
+.hero-contact:hover{background:rgba(255,255,255,.18)}
+.nav-pills{background:var(--white);border-bottom:0.5px solid var(--border);padding:.75rem 1.5rem;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:sticky;top:0;z-index:100}
+.nav-pills::-webkit-scrollbar{display:none}
+.pill{flex-shrink:0;padding:6px 14px;border-radius:100px;font-size:13px;font-weight:500;color:var(--text2);background:none;border:0.5px solid var(--border);cursor:pointer;text-decoration:none;transition:all .15s;white-space:nowrap}
+.pill:hover,.pill.active{background:var(--forest);color:var(--white);border-color:var(--forest)}
+.page{max-width:720px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.section{margin-bottom:3rem;scroll-margin-top:80px}
+.section-head{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:0.5px solid var(--border)}
+.section-icon{width:36px;height:36px;border-radius:8px;background:var(--forest);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-icon svg{width:18px;height:18px;fill:none;stroke:var(--white);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.section-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:400;color:var(--forest)}
+.card{background:var(--white);border:0.5px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:10px}
+.card-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:6px}
+.card-sub{font-size:13px;color:var(--text2);line-height:1.55}
+.card-sub a{color:var(--forest);text-decoration:none;border-bottom:0.5px solid var(--forest)}
+.wifi-block{background:var(--forest);border-radius:12px;padding:1.25rem;color:var(--white);margin-bottom:10px}
+.wifi-label{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:12px}
+.wifi-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid rgba(255,255,255,.1)}
+.wifi-row:last-child{border-bottom:none}
+.wifi-key{font-size:13px;color:rgba(255,255,255,.55)}
+.wifi-val{font-size:16px;font-weight:500;color:var(--white);font-family:monospace;letter-spacing:.04em}
+.code-block{background:var(--linen2);border:0.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.code-label{font-size:13px;color:var(--text2);margin-bottom:2px}
+.code-sublabel{font-size:11px;color:var(--text3)}
+.code-val{font-size:32px;font-weight:500;color:var(--forest);font-family:monospace;letter-spacing:.2em}
+.info-table{width:100%;border-collapse:collapse;font-size:13px}
+.info-table tr{border-bottom:0.5px solid var(--border)}
+.info-table tr:last-child{border-bottom:none}
+.info-table td{padding:9px 0;vertical-align:top}
+.info-table td:first-child{font-weight:500;color:var(--text);width:50%;padding-right:12px}
+.info-table td:last-child{color:var(--text2)}
+.info-table td a{color:var(--forest);text-decoration:none}
+.emergency-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);gap:8px}
+.emergency-row:last-child{border-bottom:none}
+.emergency-name{font-size:13px;color:var(--text2);flex:1}
+.emergency-num{font-size:13px;font-family:monospace;color:var(--forest);text-decoration:none;font-weight:500;white-space:nowrap}
+.emergency-badge{display:inline-block;font-size:10px;font-weight:500;background:#FEE2E2;color:#DC2626;border-radius:100px;padding:2px 7px;margin-left:6px;vertical-align:middle}
+.place-grid{display:grid;gap:10px}
+.place-card{background:var(--white);border:0.5px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;display:flex;gap:14px;align-items:flex-start}
+.place-num{width:28px;height:28px;border-radius:50%;background:var(--linen);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--forest);flex-shrink:0;margin-top:2px}
+.place-body{flex:1}
+.place-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px}
+.place-desc{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:7px}
+.place-links{display:flex;flex-wrap:wrap;gap:6px}
+.place-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--forest);background:var(--linen);border:0.5px solid var(--border);border-radius:100px;padding:3px 10px;text-decoration:none;transition:background .15s}
+.place-link:hover{background:var(--linen2)}
+.place-link svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.activity-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.activity-card{background:var(--white);border:0.5px solid var(--border);border-radius:12px;padding:1rem 1.1rem}
+.activity-emoji{font-size:20px;margin-bottom:6px;display:block}
+.activity-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
+.activity-desc{font-size:12px;color:var(--text2);line-height:1.45}
+.cta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:1rem}
+.cta-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:100px;font-size:13px;font-weight:500;text-decoration:none;transition:opacity .15s}
+.cta-btn:hover{opacity:.85}
+.cta-primary{background:var(--forest);color:var(--white)}
+.cta-secondary{background:var(--white);color:var(--forest);border:0.5px solid var(--border)}
+.cta-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.list-plain{padding-left:16px;display:grid;gap:4px;margin-top:6px}
+footer{background:var(--forest);color:rgba(255,255,255,.6);text-align:center;padding:2rem 1.5rem;font-size:13px}
+footer a{color:var(--rust);text-decoration:none}
+footer strong{color:var(--white);font-weight:500}
+@media(max-width:500px){.activity-grid{grid-template-columns:1fr}.hero{padding:2.5rem 1.25rem 2rem}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Torridon Estate · Wester Ross · NC500</div>
+    <div class="hero-property">Guest guide for</div>
+    <h1>Stables Cottage</h1>
+    <p class="hero-sub">Wi-Fi, dining, things to do — everything for your stay.</p>
+    <a href="https://wa.me/447931702506" class="hero-contact">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Message Felix &amp; Sarah
+    </a>
+  </div>
+</div>
+
+<nav class="nav-pills">
+  <a class="pill active" href="#arrival">Arrival</a>
+  <a class="pill" href="#wifi">Wi-Fi</a>
+  <a class="pill" href="#waste">Waste</a>
+  <a class="pill" href="#safety">Safety</a>
+  <a class="pill" href="#dining">Dining</a>
+  <a class="pill" href="#activities">Things to do</a>
+  <a class="pill" href="#contact">Contact</a>
+</nav>
+
+<div class="page">
+
+  <section class="section" id="arrival">
+    <div class="section-head">
+      <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <h2 class="section-title">Arrival &amp; your cottage</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">Finding Stables Cottage</div>
+      <div style="font-size:24px;font-weight:500;color:var(--forest);letter-spacing:.05em;margin:6px 0 8px;font-family:monospace">IV22 2HA</div>
+      <div class="card-sub">Use the postcode above for satnav. Follow the estate road past the main house — The Stables are the converted stable block on your left. Drive slowly on the estate track.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">About Stables Cottage</div>
+      <div class="card-sub">A newly refurbished converted stable block edged by woodland and close to the Corry River. Full of character with a warm, comfortable feel — well suited for a small group or family.<br><br>
+        <strong style="color:var(--text)">Sleeps:</strong> 6<br>
+        <strong style="color:var(--text)">Master suite (upstairs):</strong> King bed, ensuite with bath &amp; shower<br>
+        <strong style="color:var(--text)">Bedroom 2 (upstairs):</strong> Twin or double<br>
+        <strong style="color:var(--text)">Bedroom 3 (downstairs):</strong> Double bed<br>
+        <strong style="color:var(--text)">Bathroom (downstairs):</strong> Shower room<br>
+        <strong style="color:var(--text)">Outside:</strong> Garden, sitting area with furniture, sea &amp; mountain views<br>
+        <strong style="color:var(--text)">Inside:</strong> Open fireplace, washer/dryer, dishwasher, microwave, TV/DVD/stereo
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Check-in &amp; check-out</div>
+      <table class="info-table" style="margin-top:4px">
+        <tr><td>Check-in from</td><td>4:00 PM</td></tr>
+        <tr><td>Check-out by</td><td>10:00 AM</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Need help on arrival?</div>
+      <div class="card-sub" style="margin-bottom:1rem">If you can't find the cottage or get stuck on the track, send us a message — we're usually close by.</div>
+      <div class="cta-row">
+        <a href="https://wa.me/447931702506" class="cta-btn cta-primary"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp</a>
+        <a href="tel:+447931702506" class="cta-btn cta-secondary"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.7 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.63 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+44 7931 702506</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="wifi">
+    <div class="section-head">
+      <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
+      <h2 class="section-title">Wi-Fi</h2>
+    </div>
+    <div class="wifi-block">
+      <div class="wifi-label">Stables Cottage — Wi-Fi</div>
+      <div class="wifi-row"><span class="wifi-key">Network</span><span class="wifi-val">Torridonia_Stables_Free</span></div>
+      <div class="wifi-row"><span class="wifi-key">Password</span><span class="wifi-val">No password — open network</span></div>
+    </div>
+  </section>
+
+  <section class="section" id="waste">
+    <div class="section-head">
+      <div class="section-icon"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg></div>
+      <h2 class="section-title">Waste &amp; recycling</h2>
+    </div>
+    <div class="card"><div class="card-title">Bin location</div><div class="card-sub">Bins are at the <strong style="color:var(--text)">estate entrance</strong>, at the start of the driveway, secured with coded padlocks. Please lock them again after use.</div></div>
+    <div class="code-block"><div><div class="code-label">Bin padlock code</div><div class="code-sublabel">Estate entrance · start of driveway</div></div><div class="code-val">1080</div></div>
+    <div class="card"><div class="card-title">General waste</div><div class="card-sub">Use the black and white bin bags provided in the cottage. Our team handles all waste at the end of your stay — feel free to use the bins for any excess during your visit.</div></div>
+    <div class="card"><div class="card-title">Recycling</div><div class="card-sub">Place all recycling in the <strong style="color:var(--text)">large blue bin</strong>. Note that glass cannot go in this bin.<br><br><strong style="color:var(--text)">Glass disposal — two options:</strong><ul class="list-plain" style="margin-top:8px"><li>Drop it at the glass recycling bin at the Torridon Inn</li><li>Leave it in the cottage — our team will take care of it on departure</li></ul></div></div>
+  </section>
+
+  <section class="section" id="safety">
+    <div class="section-head">
+      <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <h2 class="section-title">Safety &amp; house rules</h2>
+    </div>
+    <div class="card"><div class="card-title">Please never leave unattended</div><div class="card-sub"><ul class="list-plain"><li>Fires or open flames</li><li>Candles</li><li>Washing machine or dryer</li></ul><div style="margin-top:10px">Always <strong style="color:var(--text)">switch off electrical devices</strong> when not in use.</div></div></div>
+    <div class="card"><div class="card-title">Plumbing — please do not flush</div><div class="card-sub"><ul class="list-plain"><li>Sanitary products</li><li>Napkins or paper towels</li><li>Cooking fat or oil</li></ul><div style="margin-top:10px;font-size:12px;color:var(--text3)">This is a rural property on a septic system. These items cause serious blockages — thank you for your understanding.</div></div></div>
+  </section>
+
+  <section class="section" id="dining">
+    <div class="section-head">
+      <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+      <h2 class="section-title">Dining nearby</h2>
+    </div>
+    <div class="place-grid">
+      <div class="place-card"><div class="place-num">1</div><div class="place-body"><div class="place-name">The Torridon Inn</div><div class="place-desc">Our closest local — good food and a proper Highland atmosphere. Bar is walk-in; restaurant worth booking ahead in summer.</div><div class="place-links"><a href="tel:+441445791242" class="place-link"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.7 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.63 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+44 1445 791242</a></div></div></div>
+      <div class="place-card"><div class="place-num">2</div><div class="place-body"><div class="place-name">Gille Brighde</div><div class="place-desc">At The Torridon hotel, 5 min drive. The more refined dinner option — booking essential.</div><div class="place-links"><a href="https://www.torridon.com" target="_blank" class="place-link"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>torridon.com</a></div></div></div>
+      <div class="place-card"><div class="place-num">3</div><div class="place-body"><div class="place-name">Shieldaig Bar &amp; Coastal Kitchen</div><div class="place-desc">On the loch in Shieldaig village, ~20 min away. Great seafood, worth the drive.</div><div class="place-links"><a href="tel:+441520755251" class="place-link"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.7 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.63 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+44 1520 755251</a></div></div></div>
+      <div class="place-card"><div class="place-num">4</div><div class="place-body"><div class="place-name">Wee Whistle Stop</div><div class="place-desc">Good for a casual lunch or coffee stop on the way in or out.</div></div></div>
+      <div class="place-card"><div class="place-num">5</div><div class="place-body"><div class="place-name">Torridon Café</div><div class="place-desc">Ideal for breakfast or a quick bite. Relaxed and local.</div></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="activities">
+    <div class="section-head">
+      <div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+      <h2 class="section-title">Things to do</h2>
+    </div>
+    <div class="activity-grid">
+      <div class="activity-card"><span class="activity-emoji">🏔️</span><div class="activity-title">Torridon Munros</div><div class="activity-desc">Beinn Alligin and Liathach — some of Scotland's finest hillwalking, right from the estate.</div></div>
+      <div class="activity-card"><span class="activity-emoji">🚣</span><div class="activity-title">Kayaking on the loch</div><div class="activity-desc">Rentals available locally. Spectacular on a calm morning.</div></div>
+      <div class="activity-card"><span class="activity-emoji">🌌</span><div class="activity-title">Dark skies</div><div class="activity-desc">No light pollution for miles. Stargazing out here is exceptional on a clear night.</div></div>
+      <div class="activity-card"><span class="activity-emoji">🐴</span><div class="activity-title">Icelandic horses</div><div class="activity-desc">We have horses on the estate — ask us about availability when you arrive.</div></div>
+      <div class="activity-card"><span class="activity-emoji">🚗</span><div class="activity-title">Applecross Pass</div><div class="activity-desc">You're on the NC500. The Bealach na Bà is a must — ~40 min away, spectacular views.</div></div>
+      <div class="activity-card"><span class="activity-emoji">🦌</span><div class="activity-title">Wildlife</div><div class="activity-desc">Red deer, golden eagles, and otters regularly spotted in the area.</div></div>
+      <div class="activity-card"><span class="activity-emoji">🏖️</span><div class="activity-title">Beaches</div><div class="activity-desc">Gruinard Bay &amp; Mellon Udrigle — beautiful beaches ~45 min north.</div></div>
+      <div class="activity-card"><span class="activity-emoji">🧗</span><div class="activity-title">Rock climbing</div><div class="activity-desc">World-class sandstone on Beinn Eighe and Torridon crags.</div></div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="section-head">
+      <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.7 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.63 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+      <h2 class="section-title">Contact &amp; emergencies</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">Felix &amp; Sarah</div>
+      <div class="card-sub" style="margin-bottom:1rem">WhatsApp is the quickest way to reach us. For urgent matters during your stay, call the mobile or landline.</div>
+      <div class="cta-row">
+        <a href="https://wa.me/447931702506" class="cta-btn cta-primary"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp +44 7931 702506</a>
+        <a href="tel:+441445793159" class="cta-btn cta-secondary"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.7 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.63 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Landline +44 1445 793159</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Medical &amp; emergency</div>
+      <div style="margin-top:4px">
+        <div class="emergency-row"><span class="emergency-name">Emergency — Police, Fire, Ambulance</span><span><a href="tel:999" class="emergency-num">999</a><span class="emergency-badge">EMERGENCY</span></span></div>
+        <div class="emergency-row"><span class="emergency-name">Torridon Medical Practice</span><a href="tel:+441445791223" class="emergency-num">+44 1445 791223</a></div>
+        <div class="emergency-row"><span class="emergency-name">NHS 24-hour Helpline</span><a href="tel:+448454242424" class="emergency-num">+44 845 424 2424</a></div>
+        <div class="emergency-row"><span class="emergency-name">Police — Loch Carron</span><a href="tel:+441520722222" class="emergency-num">+44 1520 722222</a></div>
+        <div class="emergency-row"><span class="emergency-name">Police — Gairloch</span><a href="tel:+441445712017" class="emergency-num">+44 1445 712017</a></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Petrol — nearest stations</div>
+      <div class="card-sub" style="margin-bottom:8px">There are no petrol stations in Torridon.</div>
+      <table class="info-table">
+        <tr><td>Kinlochewe Service Station</td><td><a href="tel:+441447760227">+44 1447 60227</a></td></tr>
+        <tr><td>Loch Carron Food Centre</td><td>Self-service pump</td></tr>
+        <tr><td>Gairloch Filling Station</td><td><a href="tel:+441445712415">+44 1445 712415</a></td></tr>
+      </table>
+    </div>
+    <div class="card"><div class="card-title">Banking &amp; cash</div><div class="card-sub">There are no banks or ATMs in Torridon. The nearest Bank of Scotland branches are in <strong style="color:var(--text)">Gairloch</strong> and <strong style="color:var(--text)">Kyle of Lochalsh</strong>.</div></div>
+  </section>
+
+</div>
+
+<footer>
+  <p><strong>Torridon Estate</strong> · IV22 2HA · Wester Ross, Scottish Highlands</p>
+  <p style="margin-top:6px"><a href="https://torridonestate.com">torridonestate.com</a> &nbsp;·&nbsp; <a href="https://guests.torridonia.com">All cottages</a> &nbsp;·&nbsp; <a href="https://wa.me/447931702506">WhatsApp</a></p>
+</footer>
+
+<script>
+const sections = document.querySelectorAll('.section');
+const pills = document.querySelectorAll('.pill');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      pills.forEach(p => p.classList.remove('active'));
+      const a = document.querySelector(`.pill[href="#${e.target.id}"]`);
+      if(a){a.classList.add('active');a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})}
+    }
+  });
+},{rootMargin:'-40% 0px -55% 0px'});
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
