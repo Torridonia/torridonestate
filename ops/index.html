@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Torridonia Operations Guide</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Alike&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ── Design tokens ── */
+:root {
+  --ground:        #F8F4EC;
+  --ground-raised: #F0EBE0;
+  --ground-deep:   #E8E1D3;
+  --sidebar-bg:    #1A2E28;
+  --sidebar-text:  #C8D8CE;
+  --sidebar-active:#F8F4EC;
+  --sidebar-accent:#D07A3C;
+  --text:          #1A2E28;
+  --text-muted:    #5A7262;
+  --text-faint:    #8A9E93;
+  --accent:        #A9531F;
+  --accent-h:      #8B4418;
+  --border:        #D4CAB8;
+  --border-s:      #B8AD9C;
+  --code-bg:       #EDE7DA;
+  --code-text:     #2A4038;
+  --chip-live-bg:  #D4EDD9; --chip-live-fg: #1C4D2A; --chip-live-dot: #2A7A40;
+  --chip-pend-bg:  #FDE8C8; --chip-pend-fg: #7A4A10; --chip-pend-dot: #B86A18;
+  --chip-via-bg:   #E3E8F4; --chip-via-fg:  #2A3A6A;
+  --tier1: #1A2E28; --tier2: #A9531F; --tier3: #5A4066;
+  --tier1-light: #E8F0ED; --tier2-light: #FAE8D8; --tier3-light: #EDE8F2;
+  --row-hover: rgba(26,46,40,.04);
+  --shadow:    0 2px 8px rgba(26,46,40,.10);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #111B17; --ground-raised: #17241E; --ground-deep: #1D2E27;
+    --sidebar-bg: #0D1612; --sidebar-text: #8EAD9B; --sidebar-active: #E5DDD0; --sidebar-accent: #D07A3C;
+    --text: #E5DDD0; --text-muted: #8EAD9B; --text-faint: #5A7A68;
+    --accent: #D07A3C; --accent-h: #E8894A;
+    --border: #2A3D35; --border-s: #3A5044;
+    --code-bg: #1C2820; --code-text: #A8D4B8;
+    --chip-live-bg: #1A3D28; --chip-live-fg: #7ACA96; --chip-live-dot: #4AB870;
+    --chip-pend-bg: #3A2510; --chip-pend-fg: #F0B060; --chip-pend-dot: #D07A2C;
+    --chip-via-bg:  #1E2A48; --chip-via-fg:  #8AAAE8;
+    --tier1-light: #1C2E28; --tier2-light: #2A1C10; --tier3-light: #221A2C;
+    --row-hover: rgba(200,220,210,.04);
+    --shadow: 0 2px 8px rgba(0,0,0,.4);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family:'DM Sans',system-ui,sans-serif; font-size:14px; line-height:1.65; color:var(--text); background:var(--ground); }
+a { color:var(--accent); text-decoration:none; }
+a:hover { text-decoration:underline; }
+h1,h2,h3,h4 { font-family:'Alike',Georgia,serif; font-weight:400; text-wrap:balance; margin:0; }
+p { margin:0; }
+code { font-family:'JetBrains Mono',monospace; font-size:.82em; background:var(--code-bg); color:var(--code-text); padding:.15em .45em; border-radius:3px; }
+:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+button { cursor:pointer; font-family:inherit; font-size:13px; }
+
+/* ── Layout ── */
+.shell { display:grid; grid-template-columns:250px 1fr; min-height:100vh; }
+
+/* ── Sidebar ── */
+.sidebar { background:var(--sidebar-bg); position:sticky; top:0; height:100vh; overflow-y:auto; display:flex; flex-direction:column; padding-block-start:env(safe-area-inset-top,0px); }
+.sidebar-logo { padding:22px 20px 14px; border-bottom:1px solid rgba(255,255,255,.08); }
+.sidebar-logo .wordmark { font-family:'Alike',Georgia,serif; font-size:17px; color:var(--sidebar-active); display:block; }
+.sidebar-logo .tagline { font-size:10.5px; color:var(--sidebar-text); letter-spacing:.06em; text-transform:uppercase; margin-top:3px; }
+.nav-group { padding:14px 0 2px; }
+.nav-label { font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--sidebar-accent); padding:0 20px 5px; display:block; }
+.nav-link { display:flex; align-items:center; gap:9px; padding:7px 20px; color:var(--sidebar-text); font-size:13px; text-decoration:none; transition:color .15s,background .15s; line-height:1.3; }
+.nav-link:hover { color:var(--sidebar-active); background:rgba(255,255,255,.05); text-decoration:none; }
+.nav-link .nb { width:6px; height:6px; border-radius:50%; background:var(--sidebar-accent); opacity:.55; flex-shrink:0; }
+.nav-link.vault-link .nb { background:#F0C060; opacity:.8; }
+.sidebar-foot { margin-top:auto; padding:14px 20px; border-top:1px solid rgba(255,255,255,.08); font-size:11px; color:var(--sidebar-text); line-height:1.6; }
+.sidebar-foot strong { color:var(--sidebar-active); }
+
+/* QR in sidebar footer */
+.sidebar-qr { margin-top:10px; }
+.sidebar-qr-btn { background:none; border:1px solid rgba(255,255,255,.15); color:var(--sidebar-text); border-radius:4px; padding:5px 10px; font-size:11px; width:100%; text-align:center; cursor:pointer; transition:all .15s; }
+.sidebar-qr-btn:hover { border-color:rgba(255,255,255,.3); color:var(--sidebar-active); }
+.sidebar-qr-wrap { display:none; margin-top:10px; background:var(--sidebar-active); border-radius:6px; padding:10px; text-align:center; }
+.sidebar-qr-wrap.open { display:block; }
+.sidebar-qr-wrap canvas, .sidebar-qr-wrap img { max-width:100%; border-radius:3px; }
+.sidebar-qr-url { font-size:10px; color:#5A7262; margin-top:6px; word-break:break-all; }
+
+/* ── Main ── */
+.main { padding:40px 48px; max-width:920px; }
+
+/* ── Page header ── */
+.page-hdr { margin-bottom:36px; padding-bottom:24px; border-bottom:1px solid var(--border); }
+.page-hdr h1 { font-size:30px; }
+.page-hdr .meta { font-size:13px; color:var(--text-muted); margin-top:7px; display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+
+/* ── Welcome card ── */
+.welcome-card { background:var(--tier1-light); border:1px solid var(--border); border-left:4px solid var(--tier1); border-radius:6px; padding:18px 22px; margin-bottom:36px; }
+.welcome-card h3 { font-family:'Alike',Georgia,serif; font-weight:400; font-size:17px; color:var(--text); margin-bottom:6px; }
+.welcome-card p { font-size:13px; color:var(--text-muted); line-height:1.7; }
+.welcome-card .highlight { color:var(--text); font-weight:500; }
+
+/* ── Sections ── */
+.section { margin-bottom:52px; scroll-margin-top:20px; }
+.section-eyebrow { font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:5px; }
+.section-header { margin-bottom:18px; }
+.section-header h2 { font-size:20px; }
+
+/* ── Access chain ── */
+.chain-wrap { display:flex; flex-direction:column; align-items:center; gap:0; margin:0 0 20px; }
+.tier-block { width:100%; max-width:600px; border-radius:8px; border:2px solid; padding:16px 20px; position:relative; }
+.tier-block.t1 { border-color:var(--tier1); background:var(--tier1-light); }
+.tier-block.t2 { border-color:var(--tier2); background:var(--tier2-light); }
+.tier-block.t3 { border-color:var(--tier3); background:var(--tier3-light); }
+.tier-label { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
+.t1 .tier-label { color:var(--tier1); }
+.t2 .tier-label { color:var(--tier2); }
+.t3 .tier-label { color:var(--tier3); }
+.tier-title { font-family:'Alike',Georgia,serif; font-size:16px; margin-bottom:6px; color:var(--text); }
+.tier-sub { font-size:12px; color:var(--text-muted); }
+.tier-platforms { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.tier-platform { background:var(--ground); border:1px solid var(--border); border-radius:5px; padding:6px 12px; font-size:12px; font-weight:500; color:var(--text); }
+.chain-arrow { display:flex; align-items:center; justify-content:center; flex-direction:column; gap:2px; padding:4px 0; color:var(--text-muted); font-size:11px; letter-spacing:.05em; }
+.chain-arrow svg { display:block; }
+
+/* ── Info block ── */
+.info { background:var(--ground-raised); border-left:3px solid var(--accent); border-radius:0 4px 4px 0; padding:12px 16px; margin-bottom:16px; font-size:13px; color:var(--text-muted); line-height:1.65; }
+.info strong { color:var(--text); }
+.info.tip { border-color:#2A7A40; }
+.info.warn { border-color:#A94040; }
+
+/* ── Platform cards ── */
+.platform-grid { display:flex; flex-direction:column; gap:14px; }
+.platform-card { border:1px solid var(--border); border-radius:7px; overflow:hidden; }
+.platform-head { display:flex; align-items:center; gap:14px; padding:14px 18px; background:var(--ground-raised); border-bottom:1px solid var(--border); }
+.platform-icon { width:36px; height:36px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; flex-shrink:0; }
+.platform-head-text { flex:1 }
+.platform-name { font-family:'Alike',Georgia,serif; font-size:15px; color:var(--text); margin-bottom:2px; }
+.platform-tagline { font-size:12px; color:var(--text-muted); }
+.platform-chips { display:flex; gap:7px; align-items:center; flex-wrap:wrap; }
+.platform-body { padding:14px 18px; font-size:13px; color:var(--text-muted); line-height:1.7; }
+.platform-body strong { color:var(--text); }
+.platform-body .login-row { margin-top:10px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.platform-body .login-row a { font-family:'JetBrains Mono',monospace; font-size:.82em; background:var(--code-bg); color:var(--code-text); padding:.2em .5em; border-radius:3px; }
+.platform-body .login-note { font-size:12px; color:var(--text-faint); }
+.platform-body .analogy { font-style:italic; color:var(--text-faint); margin-bottom:8px; display:block; font-size:12.5px; }
+
+/* ── Chips ── */
+.chip { display:inline-flex; align-items:center; gap:5px; padding:2px 9px; border-radius:100px; font-size:11px; font-weight:500; white-space:nowrap; }
+.chip::before { content:''; width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+.chip-live { background:var(--chip-live-bg); color:var(--chip-live-fg); }
+.chip-live::before { background:var(--chip-live-dot); }
+.chip-pend { background:var(--chip-pend-bg); color:var(--chip-pend-fg); }
+.chip-pend::before { background:var(--chip-pend-dot); }
+.chip-via { background:var(--chip-via-bg); color:var(--chip-via-fg); }
+.chip-via::before { background:var(--chip-via-fg); opacity:.7; }
+.chip-lock { background:var(--ground-deep); color:var(--text-muted); }
+.chip-lock::before { background:var(--text-faint); }
+
+/* ── Tables ── */
+.tbl { width:100%; border-collapse:collapse; font-size:13px; }
+.tbl thead tr { border-bottom:1px solid var(--border-s); }
+.tbl thead th { text-align:left; font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); padding:0 12px 7px 0; }
+.tbl tbody tr { border-bottom:1px solid var(--border); }
+.tbl tbody tr:hover { background:var(--row-hover); }
+.tbl tbody tr:last-child { border-bottom:none; }
+.tbl td { padding:10px 12px 10px 0; vertical-align:top; color:var(--text-muted); }
+.tbl td.route { font-family:'JetBrains Mono',monospace; font-size:.82em; color:var(--text); }
+.overflow-tbl { overflow-x:auto; }
+
+/* ── Credential Vault ── */
+.vault-wrapper { border:2px solid var(--border-s); border-radius:8px; overflow:hidden; }
+.vault-header { background:var(--sidebar-bg); padding:16px 20px; display:flex; align-items:center; gap:12px; }
+.vault-header-icon { color:var(--sidebar-text); display:flex; align-items:center; }
+.vault-header-text .title { font-family:'Alike',Georgia,serif; color:var(--sidebar-active); font-size:17px; }
+.vault-header-text .sub { font-size:12px; color:var(--sidebar-text); margin-top:2px; }
+
+/* Auth states */
+.vault-panel { padding:36px 24px; text-align:center; background:var(--ground-raised); }
+.vault-panel .panel-icon { color:var(--text-faint); display:flex; justify-content:center; margin-bottom:12px; }
+.vault-panel h3 { font-family:'Alike',Georgia,serif; font-weight:400; color:var(--text); margin-bottom:8px; }
+.vault-panel p { font-size:13px; color:var(--text-muted); margin-bottom:6px; line-height:1.6; }
+
+.vault-form { max-width:340px; margin:16px auto 0; text-align:left; }
+.vault-form label { display:block; font-size:11px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--text-muted); margin-bottom:5px; }
+.vault-form input { width:100%; background:var(--ground); border:1px solid var(--border); border-radius:4px; padding:9px 12px; font-size:13px; color:var(--text); font-family:'DM Sans',sans-serif; }
+.vault-form input:focus { outline:none; border-color:var(--accent); }
+.vault-form input.otp-input { font-family:'JetBrains Mono',monospace; font-size:20px; text-align:center; letter-spacing:.25em; }
+.vault-form-actions { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
+.btn-primary-vault { display:block; width:100%; background:var(--tier1); color:#F8F4EC; border:none; border-radius:5px; padding:10px; font-size:13px; font-weight:500; text-align:center; cursor:pointer; transition:background .15s; }
+.btn-primary-vault:hover { background:var(--accent); }
+.btn-secondary-vault { background:none; border:none; color:var(--text-faint); font-size:12px; text-align:center; cursor:pointer; padding:4px; }
+.btn-secondary-vault:hover { color:var(--accent); }
+.vault-msg { font-size:12px; margin-top:8px; text-align:center; }
+.vault-msg.ok { color:#2A7A40; }
+.vault-msg.err { color:#A94040; }
+
+/* Loading */
+.vault-loading { padding:32px; text-align:center; color:var(--text-muted); font-size:13px; background:var(--ground-raised); }
+.vault-loading .spinner { width:20px; height:20px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; display:inline-block; margin-bottom:8px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* Credential list */
+.vault-body { padding:20px; background:var(--ground-raised); }
+.vault-body-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.vault-body-header h4 { font-family:'DM Sans',sans-serif; font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); }
+.btn-signout { background:none; border:1px solid var(--border); color:var(--text-faint); border-radius:4px; padding:4px 10px; font-size:12px; }
+.btn-signout:hover { border-color:var(--border-s); color:var(--text); }
+.cred-list { display:flex; flex-direction:column; gap:12px; margin-bottom:16px; }
+.cred-card { background:var(--ground); border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+.cred-card-head { display:flex; align-items:center; gap:12px; padding:12px 14px; border-bottom:1px solid var(--border); }
+.cred-card-icon { width:34px; height:34px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; background:var(--ground-raised); color:var(--text-muted); flex-shrink:0; }
+.cred-card-title { flex:1; }
+.cred-card-title .cname { font-size:14px; font-weight:600; color:var(--text); }
+.cred-card-title .cmethod { font-size:11px; color:var(--text-faint); margin-top:1px; }
+.cred-card-actions { display:flex; gap:6px; }
+.btn-icon { background:none; border:1px solid var(--border); border-radius:4px; padding:4px 10px; font-size:12px; color:var(--text-muted); transition:all .15s; }
+.btn-icon:hover { background:var(--ground-raised); border-color:var(--border-s); color:var(--text); }
+.cred-card-body { padding:12px 14px; display:grid; grid-template-columns:90px 1fr; gap:6px 12px; font-size:13px; }
+.cred-field-label { color:var(--text-faint); font-size:11px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; padding-top:1px; }
+.cred-field-value { color:var(--text); font-family:'JetBrains Mono',monospace; font-size:.84em; word-break:break-all; }
+.cred-field-value a { font-family:inherit; color:var(--accent); }
+.pw-dots { letter-spacing:.1em; color:var(--text-faint); }
+.pw-toggle { background:none; border:none; font-size:11px; color:var(--accent); padding:0 0 0 8px; cursor:pointer; }
+.cred-notes { grid-column:1/-1; font-size:12px; color:var(--text-faint); font-family:'DM Sans',sans-serif; font-style:italic; border-top:1px solid var(--border); padding-top:8px; margin-top:4px; }
+.cred-empty-note { font-style:italic; color:var(--text-faint); font-size:12px; }
+.cred-edit-form { padding:14px; background:var(--ground-raised); border-top:1px solid var(--border); display:flex; flex-direction:column; gap:10px; }
+.form-row { display:flex; flex-direction:column; gap:4px; }
+.form-row label { font-size:11px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--text-muted); }
+.form-row input, .form-row textarea, .form-row select { background:var(--ground); border:1px solid var(--border); border-radius:4px; padding:7px 10px; font-size:13px; color:var(--text); font-family:'DM Sans',sans-serif; width:100%; }
+.form-row input:focus, .form-row textarea:focus, .form-row select:focus { outline:none; border-color:var(--accent); }
+.form-row textarea { resize:vertical; min-height:60px; }
+.form-actions { display:flex; gap:8px; justify-content:flex-end; }
+.btn-save { background:var(--tier1); color:#F8F4EC; border:none; border-radius:4px; padding:7px 18px; font-size:13px; font-weight:500; }
+.btn-save:hover { background:var(--accent); }
+.btn-cancel { background:none; border:1px solid var(--border); color:var(--text-muted); border-radius:4px; padding:7px 14px; font-size:13px; }
+.btn-cancel:hover { border-color:var(--border-s); color:var(--text); }
+.vault-add { border-top:1px dashed var(--border); padding-top:16px; }
+.btn-add { background:none; border:1px dashed var(--border-s); color:var(--text-muted); border-radius:5px; padding:9px 18px; font-size:13px; width:100%; text-align:center; transition:all .15s; }
+.btn-add:hover { border-color:var(--accent); color:var(--accent); background:var(--ground); }
+.add-form { margin-top:14px; background:var(--ground); border:1px solid var(--border); border-radius:6px; padding:16px; display:flex; flex-direction:column; gap:10px; }
+.add-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.save-status { font-size:11px; color:var(--text-faint); margin-left:8px; }
+.save-status.ok { color:#2A7A40; }
+
+/* ── QR section ── */
+.qr-section { display:flex; gap:32px; align-items:flex-start; background:var(--ground-raised); border:1px solid var(--border); border-radius:8px; padding:20px 24px; }
+.qr-box { flex-shrink:0; background:var(--ground); border:1px solid var(--border); border-radius:8px; padding:12px; }
+.qr-box canvas, .qr-box img { display:block; }
+.qr-info { flex:1; }
+.qr-info h4 { font-family:'Alike',Georgia,serif; font-weight:400; font-size:16px; margin-bottom:8px; }
+.qr-info p { font-size:13px; color:var(--text-muted); line-height:1.65; }
+.qr-url { font-family:'JetBrains Mono',monospace; font-size:12px; background:var(--code-bg); color:var(--code-text); padding:6px 10px; border-radius:4px; margin-top:10px; word-break:break-all; }
+.qr-actions { margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+.qr-btn { background:var(--tier1); color:#F8F4EC; border:none; border-radius:5px; padding:7px 14px; font-size:12px; font-weight:500; cursor:pointer; transition:background .15s; }
+.qr-btn:hover { background:var(--accent); }
+.qr-btn-outline { background:none; border:1px solid var(--border); color:var(--text-muted); border-radius:5px; padding:7px 14px; font-size:12px; cursor:pointer; transition:all .15s; }
+.qr-btn-outline:hover { border-color:var(--border-s); color:var(--text); }
+
+/* ── Rule list ── */
+.rule-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; }
+.rule-list li { display:flex; gap:12px; align-items:start; font-size:13px; color:var(--text-muted); line-height:1.55; padding:10px 14px; border:1px solid var(--border); border-radius:5px; }
+.rule-list li .ri { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; margin-top:1px; }
+.rule-list li .ri.warn { background:var(--chip-pend-bg); color:var(--chip-pend-fg); }
+.rule-list li .ri.ok { background:var(--chip-live-bg); color:var(--chip-live-fg); }
+.rule-list li strong { color:var(--text); }
+
+/* ── Pending checklist ── */
+.cl { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px; }
+.cl li { display:grid; grid-template-columns:28px 1fr auto; gap:10px; align-items:start; background:var(--ground-raised); border:1px solid var(--border); border-radius:6px; padding:12px 14px; font-size:13px; }
+.cl-n { font-family:'JetBrains Mono',monospace; font-size:.8em; color:var(--text-faint); padding-top:2px; }
+.cl-b { color:var(--text-muted); line-height:1.55; }
+.cl-b strong { color:var(--text); display:block; margin-bottom:2px; }
+
+/* ── Responsive ── */
+@media (max-width:760px) {
+  .shell { grid-template-columns:1fr; }
+  .sidebar { position:static; height:auto; flex-direction:row; flex-wrap:wrap; padding:10px 14px; gap:0; }
+  .sidebar-logo { padding:0; border:none; margin-right:auto; }
+  .sidebar-logo .tagline { display:none; }
+  .nav-group { display:flex; flex-wrap:wrap; gap:0; padding:0; }
+  .nav-label { display:none; }
+  .nav-link { padding:6px 8px; font-size:12px; }
+  .nav-link .nb { display:none; }
+  .sidebar-foot { display:none; }
+  .main { padding:20px 16px; }
+  .chain-wrap { align-items:stretch; }
+  .tier-block { max-width:100%; }
+  .add-form-grid { grid-template-columns:1fr; }
+  .cred-card-body { grid-template-columns:80px 1fr; }
+  .qr-section { flex-direction:column; gap:16px; }
+}
+</style>
+
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<!-- QR Code generator -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<div class="shell">
+
+<!-- Sidebar -->
+<nav class="sidebar" aria-label="Guide navigation">
+  <div class="sidebar-logo">
+    <span class="wordmark">Torridonia</span>
+    <span class="tagline">Operations Guide</span>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Get started</span>
+    <a class="nav-link" href="#welcome"><span class="nb"></span>Welcome, Felix</a>
+    <a class="nav-link" href="#access-chain"><span class="nb"></span>How to Log In</a>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Your platforms</span>
+    <a class="nav-link" href="#platforms"><span class="nb"></span>Platform Guide</a>
+    <a class="nav-link" href="#admin-panel"><span class="nb"></span>Admin Panel</a>
+    <a class="nav-link" href="#staff-app"><span class="nb"></span>Staff App</a>
+    <a class="nav-link" href="#booking"><span class="nb"></span>Booking (Amenitiz)</a>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Managing the site</span>
+    <a class="nav-link" href="#content"><span class="nb"></span>Update Content</a>
+    <a class="nav-link" href="#deploy"><span class="nb"></span>Deploy Changes</a>
+    <a class="nav-link" href="#repositories"><span class="nb"></span>Repositories</a>
+    <a class="nav-link" href="#public-routes"><span class="nb"></span>Site Map</a>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Restricted</span>
+    <a class="nav-link vault-link" href="#vault"><span class="nb"></span>Credentials Vault</a>
+    <a class="nav-link" href="#qr"><span class="nb"></span>QR Code</a>
+    <a class="nav-link" href="#pending"><span class="nb"></span>Pending Activations</a>
+    <a class="nav-link" href="#security"><span class="nb"></span>Security Rules</a>
+  </div>
+  <div class="sidebar-foot">
+    <strong>Felix von Racknitz</strong><br>
+    fvonracknitz@me.com<br>
+    Recovery for bookings@torridonia.com
+    <div class="sidebar-qr">
+      <button class="sidebar-qr-btn" id="btn-sidebar-qr">Show QR</button>
+      <div class="sidebar-qr-wrap" id="sidebar-qr-wrap">
+        <div id="sidebar-qr-canvas"></div>
+        <div class="sidebar-qr-url">guests.torridonia.com/ops/</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Main content -->
+<main class="main">
+
+  <header class="page-hdr">
+    <h1>Torridonia Operations Guide</h1>
+    <div class="meta">
+      <span>torridonia.com</span>
+      <span style="color:var(--border-s)">·</span>
+      <span>September 2026</span>
+      <span style="color:var(--border-s)">·</span>
+      <span>Internal reference — Felix &amp; Jorge</span>
+    </div>
+  </header>
+
+  <!-- Welcome -->
+  <div class="welcome-card" id="welcome">
+    <h3>Welcome, Felix</h3>
+    <p>This guide is your complete reference for running and maintaining the Torridonia digital platform. You will find <span class="highlight">step-by-step access instructions for every tool</span>, a map of the website, and a private credentials vault that only you and Jorge can access.</p>
+    <p style="margin-top:8px">The single most important thing: <span class="highlight">for day-to-day management — rooms, photos, volunteer rota, page text — you only need the Admin Panel at <a href="https://torridonia.com/admin">torridonia.com/admin</a></span>. The other platforms require technical help to use safely.</p>
+  </div>
+
+  <!-- Access chain -->
+  <section class="section" id="access-chain">
+    <div class="section-eyebrow">How to log in</div>
+    <div class="section-header"><h2>The Login Chain — Three Tiers</h2></div>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:20px">All platforms connect through one master account. Think of it like a set of nested keys: the first key unlocks the second, and the second unlocks the third. You only need to remember one password.</p>
+
+    <div class="chain-wrap">
+      <div class="tier-block t1">
+        <div class="tier-label">Tier 1 — Your own password</div>
+        <div class="tier-title">Google Workspace — bookings@torridonia.com</div>
+        <div class="tier-sub">This is your master key. One email, one password, unlocks everything else. Like an Apple ID for the estate business.</div>
+        <div class="tier-platforms">
+          <div class="tier-platform">Gmail (bookings@torridonia.com)</div>
+          <div class="tier-platform">Google Calendar</div>
+          <div class="tier-platform">Google Drive (volunteer rota sheet)</div>
+          <div class="tier-platform">Amenitiz (PMS / bookings)</div>
+          <div class="tier-platform">Worldpackers (volunteers)</div>
+          <div class="tier-platform">Siteground (old hosting)</div>
+        </div>
+      </div>
+      <div class="chain-arrow">
+        <svg width="18" height="24" viewBox="0 0 18 24"><line x1="9" y1="0" x2="9" y2="20" stroke="currentColor" stroke-width="1.5"/><polyline points="4,15 9,22 14,15" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        <span>Sign in with Google → bookings@torridonia.com</span>
+      </div>
+      <div class="tier-block t2">
+        <div class="tier-label">Tier 2 — Enter with Google (no extra password)</div>
+        <div class="tier-title">GitHub · Cloudflare</div>
+        <div class="tier-sub">Log in by clicking "Sign in with Google" and choosing bookings@torridonia.com. No extra password needed.</div>
+        <div class="tier-platforms">
+          <div class="tier-platform">GitHub — torridonia (main website)</div>
+          <div class="tier-platform">GitHub — torridonestate (booking site)</div>
+          <div class="tier-platform">Cloudflare (domain and DNS)</div>
+        </div>
+      </div>
+      <div class="chain-arrow">
+        <svg width="18" height="24" viewBox="0 0 18 24"><line x1="9" y1="0" x2="9" y2="20" stroke="currentColor" stroke-width="1.5"/><polyline points="4,15 9,22 14,15" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        <span>Continue with GitHub (no extra password)</span>
+      </div>
+      <div class="tier-block t3">
+        <div class="tier-label">Tier 3 — Enter with GitHub (no extra password)</div>
+        <div class="tier-title">Vercel · Supabase</div>
+        <div class="tier-sub">Log in by clicking "Continue with GitHub". These platforms are purely technical — they run automatically and you rarely need to open them.</div>
+        <div class="tier-platforms">
+          <div class="tier-platform">Vercel (website host — auto-publishes)</div>
+          <div class="tier-platform">Supabase (database)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info tip">
+      <strong>In practice:</strong> You will almost never need to log into Tier 2 or Tier 3 platforms. The website publishes itself automatically when Jorge or a developer makes a change. Your daily work lives in <strong>bookings@torridonia.com</strong> and the <strong>Admin Panel</strong> at torridonia.com/admin.
+    </div>
+  </section>
+
+  <!-- Platform Guide -->
+  <section class="section" id="platforms">
+    <div class="section-eyebrow">Your platforms</div>
+    <div class="section-header"><h2>Platform Guide</h2></div>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:18px">What each platform is for, how to log in, and how often you actually need it.</p>
+
+    <div class="platform-grid">
+
+      <div class="platform-card">
+        <div class="platform-head">
+          <div class="platform-icon" style="background:#E8F0FE;color:#3B5BDB">G</div>
+          <div class="platform-head-text">
+            <div class="platform-name">Google Workspace</div>
+            <div class="platform-tagline">bookings@torridonia.com — your master business account</div>
+          </div>
+          <div class="platform-chips"><span class="chip chip-live">Daily use</span></div>
+        </div>
+        <div class="platform-body">
+          <span class="analogy">Think of this like Apple Business — it runs your email, calendar, and cloud storage all in one Google account. It also unlocks GitHub and Cloudflare without a separate password.</span>
+          <strong>What you do here:</strong> Read and send emails · Manage the Google Calendar for estate events · Access the shared volunteer rota in Google Drive
+          <div class="login-row">
+            <span>Login:</span>
+            <a href="https://mail.google.com" target="_blank">mail.google.com</a>
+            <a href="https://drive.google.com" target="_blank">drive.google.com</a>
+            <span class="login-note">— email: bookings@torridonia.com · password: see Credentials Vault</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-head">
+          <div class="platform-icon" style="background:#FEF2E8;color:#C2590A">Am</div>
+          <div class="platform-head-text">
+            <div class="platform-name">Amenitiz</div>
+            <div class="platform-tagline">The live booking and property management system</div>
+          </div>
+          <div class="platform-chips"><span class="chip chip-live">Daily use</span></div>
+        </div>
+        <div class="platform-body">
+          <span class="analogy">Think of this like the back-office of Booking.com — it shows all reservations, guest details, and room availability in one place. Real bookings and payments happen here today.</span>
+          <strong>What you do here:</strong> View and manage all incoming reservations · Check guest details and arrival dates · Block or open dates on the availability calendar · Process payments
+          <div class="login-row">
+            <span>Login:</span>
+            <a href="https://torridonestate.com" target="_blank">torridonestate.com</a>
+            <span class="login-note">— own email + password (see Credentials Vault)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-head">
+          <div class="platform-icon" style="background:#E8F5E9;color:#2E7D32">Wp</div>
+          <div class="platform-head-text">
+            <div class="platform-name">Worldpackers</div>
+            <div class="platform-tagline">Volunteer recruitment and messaging</div>
+          </div>
+          <div class="platform-chips"><span class="chip chip-pend">Weekly use</span></div>
+        </div>
+        <div class="platform-body">
+          <span class="analogy">Think of this like LinkedIn for volunteer travellers — people who want to work a few hours a day in exchange for accommodation and meals.</span>
+          <strong>What you do here:</strong> Review incoming volunteer applications · Read profiles and message applicants · Accept or decline applications
+          <div class="login-row">
+            <span>Login:</span>
+            <a href="https://www.worldpackers.com" target="_blank">worldpackers.com</a>
+            <span class="login-note">— own email + password (see Credentials Vault)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-head">
+          <div class="platform-icon" style="background:#E8F0ED;color:#1A2E28">T</div>
+          <div class="platform-head-text">
+            <div class="platform-name">Torridonia Admin Panel</div>
+            <div class="platform-tagline">torridonia.com/admin — the daily operations dashboard</div>
+          </div>
+          <div class="platform-chips"><span class="chip chip-live">Daily use</span></div>
+        </div>
+        <div class="platform-body">
+          <span class="analogy">This is your primary workspace — the equivalent of a hotel manager's office, but online. Rooms, photos, volunteer rota, page text, reviews, enquiries — all in one place.</span>
+          <strong>What you do here:</strong> Manage room photos and descriptions · Block calendar availability · Run the volunteer rota · Edit website text · Review guest feedback
+          <div class="login-row">
+            <span>Login:</span>
+            <a href="https://torridonia.com/admin" target="_blank">torridonia.com/admin</a>
+            <span class="login-note">— email: fvonracknitz@me.com or admin@torridonia.com · see Credentials Vault</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-head">
+          <div class="platform-icon" style="background:#FFF3E0;color:#8B5A00">Sg</div>
+          <div class="platform-head-text">
+            <div class="platform-name">Siteground</div>
+            <div class="platform-tagline">Legacy web hosting (original site)</div>
+          </div>
+          <div class="platform-chips"><span class="chip chip-lock">Rarely needed</span></div>
+        </div>
+        <div class="platform-body">
+          <span class="analogy">Siteground was the web server that used to run the old torridonia.com website. The new website has moved to Vercel, but Siteground may still hold old email settings or archived files.</span>
+          <strong>What you'd do here:</strong> Access old website files if needed · Check email routing settings
+          <div class="login-row">
+            <span>Login:</span>
+            <a href="https://my.siteground.com" target="_blank">my.siteground.com</a>
+            <span class="login-note">— own email + password (see Credentials Vault)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-head">
+          <div class="platform-icon" style="background:#F0EFF4;color:#2A2A3A">Gh</div>
+          <div class="platform-head-text">
+            <div class="platform-name">GitHub (both repositories)</div>
+            <div class="platform-tagline">torridonia &amp; torridonestate — code storage</div>
+          </div>
+          <div class="platform-chips"><span class="chip chip-via">Via Google · Rarely needed</span></div>
+        </div>
+        <div class="platform-body">
+          <span class="analogy">Think of GitHub like Dropbox for code — it stores every version of the website ever made. When a developer makes a change and "pushes" it to GitHub, the website automatically updates.</span>
+          <strong>What you'd do here:</strong> See the history of website changes · Rarely touch this — a developer handles it
+          <div class="login-row">
+            <span>Login:</span>
+            <a href="https://github.com/Torridonia" target="_blank">github.com/Torridonia</a>
+            <span class="login-note">— click "Sign in with Google" → bookings@torridonia.com</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-head">
+          <div class="platform-icon" style="background:#FFF8E1;color:#8B6A00">Cf</div>
+          <div class="platform-head-text">
+            <div class="platform-name">Cloudflare</div>
+            <div class="platform-tagline">DNS — the signpost for torridonia.com</div>
+          </div>
+          <div class="platform-chips"><span class="chip chip-via">Via Google · Rarely needed</span></div>
+        </div>
+        <div class="platform-body">
+          <span class="analogy">When someone types "torridonia.com" into a browser, Cloudflare is what tells that browser where the website actually lives. Think of it like a phone directory for the internet.</span>
+          <strong>What you'd do here:</strong> Only if setting up a new sub-domain or moving hosts — requires technical help
+          <div class="login-row">
+            <span>Login:</span>
+            <a href="https://dash.cloudflare.com" target="_blank">dash.cloudflare.com</a>
+            <span class="login-note">— click "Sign in with Google" → bookings@torridonia.com</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-head">
+          <div class="platform-icon" style="background:#F0F0F0;color:#1A1A1A">V</div>
+          <div class="platform-head-text">
+            <div class="platform-name">Vercel</div>
+            <div class="platform-tagline">Website host — publishes automatically from GitHub</div>
+          </div>
+          <div class="platform-chips"><span class="chip chip-via">Via GitHub · Rarely needed</span></div>
+        </div>
+        <div class="platform-body">
+          <span class="analogy">Vercel is the factory that converts the code into the live website, automatically, every time a developer makes a change. It runs in the background — you only open it to check if something went wrong.</span>
+          <strong>What you'd do here:</strong> Check if a deployment failed (green OK = live, red ERROR = call Jorge)
+          <div class="login-row">
+            <span>Login:</span>
+            <a href="https://vercel.com" target="_blank">vercel.com</a>
+            <span class="login-note">— click "Continue with GitHub"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="platform-card">
+        <div class="platform-head">
+          <div class="platform-icon" style="background:#E8F5F0;color:#1A6B4A">Sb</div>
+          <div class="platform-head-text">
+            <div class="platform-name">Supabase</div>
+            <div class="platform-tagline">Database — all guest, booking, and product data</div>
+          </div>
+          <div class="platform-chips"><span class="chip chip-via">Via GitHub · Technical only</span></div>
+        </div>
+        <div class="platform-body">
+          <span class="analogy">Supabase is the digital filing cabinet where every piece of information on the platform lives — guest bookings, volunteer profiles, room details, product inventory, reviews. It is fully automatic.</span>
+          <strong>What you'd do here:</strong> Only for advanced troubleshooting — always with Jorge or a developer
+          <div class="login-row">
+            <span>Login:</span>
+            <a href="https://supabase.com/dashboard" target="_blank">supabase.com/dashboard</a>
+            <span class="login-note">— click "Continue with GitHub"</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Admin Panel -->
+  <section class="section" id="admin-panel">
+    <div class="section-eyebrow">Daily operations</div>
+    <div class="section-header"><h2>Admin Panel — What Each Screen Does</h2></div>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px">Sign in at <a href="https://torridonia.com/admin">torridonia.com/admin</a>. This is where you manage the estate day-to-day — no technical knowledge needed.</p>
+    <div class="overflow-tbl">
+      <table class="tbl">
+        <thead><tr><th style="width:180px">Screen</th><th>What you can do here</th></tr></thead>
+        <tbody>
+          <tr><td class="route">/admin</td><td>Dashboard — bookings summary, recent orders, pending enquiries at a glance</td></tr>
+          <tr><td class="route">/admin/bookings</td><td>View all bookings. Cancel a booking if needed (this releases the dates back to available)</td></tr>
+          <tr><td class="route">/admin/spaces</td><td>List of all 9 rooms and cottages. You can show or hide any space</td></tr>
+          <tr><td class="route">/admin/spaces/:id</td><td><strong>Edit a room or cottage:</strong> update description, nightly rate, bed count, amenities. Upload and reorder room photos and videos — drag to reorder, bin to delete</td></tr>
+          <tr><td class="route">/admin/availability</td><td>Block or open specific dates for any room. Override the nightly price for a specific date</td></tr>
+          <tr><td class="route">/admin/reviews</td><td>See all guest reviews. 4-star and above reviews are public; 3-star and below are private</td></tr>
+          <tr><td class="route">/admin/enquiries</td><td>Inbox for enquiry forms submitted through the website. Mark as read or resolved</td></tr>
+          <tr><td class="route">/admin/pages</td><td>Edit any page's text — choose a page, then edit each paragraph or section as a simple form field. Changes go live immediately</td></tr>
+          <tr><td class="route">/admin/volunteers</td><td>Weekly volunteer rota — assign shifts, mark a shift lead with a star, export to Excel or Google Drive</td></tr>
+          <tr><td class="route">/admin/sops</td><td>Standard operating procedures for each shift type. Edit them in place using the Preview/Edit toggle</td></tr>
+          <tr><td class="route">/admin/store</td><td>Manage products in the maker's store — descriptions, stock, pricing, digital downloads</td></tr>
+          <tr><td class="route">/admin/orders</td><td>Store orders — view, cancel, refund</td></tr>
+          <tr><td class="route">/admin/media</td><td>Upload photos and videos to the library. Accepted: JPEG, PNG, WebP, HEIC, MP4</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Staff App -->
+  <section class="section" id="staff-app">
+    <div class="section-eyebrow">Volunteers</div>
+    <div class="section-header"><h2>Staff &amp; Volunteer App</h2></div>
+    <div class="info">
+      <strong>Volunteers access a separate app from the admin panel.</strong> They sign up themselves — no admin action required to create their account. They only need to enter their name exactly as it appears in the rota.
+    </div>
+    <div class="overflow-tbl" style="margin-top:16px">
+      <table class="tbl">
+        <thead><tr><th style="width:200px">Screen</th><th>What it shows</th></tr></thead>
+        <tbody>
+          <tr><td class="route">/staff/login</td><td>Sign in or register — via Google or email magic link. Name must match the rota exactly</td></tr>
+          <tr><td class="route">/staff/rota</td><td>Personal weekly schedule ("My week" panel) + the full team rota</td></tr>
+          <tr><td class="route">/staff/sops</td><td>Shift instructions for each role</td></tr>
+          <tr><td class="route">/staff/checkins</td><td>Today's arrivals and departures (refreshes every 2 minutes)</td></tr>
+          <tr><td class="route">/staff/events</td><td>Upcoming estate events</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info" style="margin-top:14px">
+      <strong>If a volunteer shows "Pending approval":</strong> their registered name doesn't match the rota. They can correct it from the yellow banner on their rota screen. You can also update the volunteer's name directly in <code>/admin/volunteers</code>.
+    </div>
+  </section>
+
+  <!-- Booking -->
+  <section class="section" id="booking">
+    <div class="section-eyebrow">Reservations</div>
+    <div class="section-header"><h2>Booking System — Amenitiz</h2></div>
+    <div class="info tip" style="margin-bottom:16px">
+      <strong>All real bookings and payments happen in Amenitiz.</strong> The "Book now" buttons on torridonia.com send visitors directly to Amenitiz to complete their reservation.
+    </div>
+    <div class="overflow-tbl">
+      <table class="tbl">
+        <thead><tr><th>Room</th><th>Direct booking link</th></tr></thead>
+        <tbody>
+          <tr><td>The Suite</td><td class="route"><a href="https://www.torridonestate.com/room/the-suite-34b5c8c0-4c2c-4254-a8e2-637f6aa9b8db" target="_blank">torridonestate.com/room/the-suite-…</a></td></tr>
+          <tr><td>East Room One</td><td class="route"><a href="https://www.torridonestate.com/room/east-room-one" target="_blank">torridonestate.com/room/east-room-one</a></td></tr>
+          <tr><td>East Room Two</td><td class="route"><a href="https://www.torridonestate.com/room/east-room-two" target="_blank">torridonestate.com/room/east-room-two</a></td></tr>
+          <tr><td>School Room</td><td class="route"><a href="https://www.torridonestate.com/room/school-room" target="_blank">torridonestate.com/room/school-room</a></td></tr>
+          <tr><td>Riverview</td><td class="route"><a href="https://www.torridonestate.com/room/riverview" target="_blank">torridonestate.com/room/riverview</a></td></tr>
+          <tr><td>Cottages (all)</td><td class="route"><a href="https://www.torridonestate.com/rooms" target="_blank">torridonestate.com/rooms</a> — individual cottage links pending</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Content Management -->
+  <section class="section" id="content">
+    <div class="section-eyebrow">No code required</div>
+    <div class="section-header"><h2>Updating the Website Content</h2></div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="background:var(--ground-raised);border:1px solid var(--border);border-radius:6px;padding:16px 18px">
+        <h4 style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:8px">Changing page text</h4>
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.7">Go to <strong>Admin → Pages</strong> (<a href="https://torridonia.com/admin/pages">torridonia.com/admin/pages</a>). Select the page. Each paragraph or heading is a simple text box — type, save, done. Changes go live immediately with no deploy.</p>
+      </div>
+      <div style="background:var(--ground-raised);border:1px solid var(--border);border-radius:6px;padding:16px 18px">
+        <h4 style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:8px">Changing room photos</h4>
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.7">Go to <strong>Admin → Spaces</strong> (<a href="https://torridonia.com/admin/spaces">torridonia.com/admin/spaces</a>), then click the room. In the Media section, click Upload, pick a photo, done. Drag tiles to reorder. Bin to delete.</p>
+      </div>
+      <div style="background:var(--ground-raised);border:1px solid var(--border);border-radius:6px;padding:16px 18px">
+        <h4 style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:8px">Managing the volunteer rota</h4>
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.7">Go to <strong>Admin → Volunteers</strong> (<a href="https://torridonia.com/admin/volunteers">torridonia.com/admin/volunteers</a>). Navigate weeks with Prev / Next. Each cell has a dropdown to assign a shift. Click the star to mark a lead.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deploy -->
+  <section class="section" id="deploy">
+    <div class="section-eyebrow">For developers</div>
+    <div class="section-header"><h2>Deploying Code Changes</h2></div>
+    <div class="info">
+      <strong>Deploying is automatic.</strong> When a developer pushes code to the <code>main</code> branch on GitHub, Vercel picks it up and the website updates within 2–3 minutes. No manual step required. Felix does not need to do this.
+    </div>
+    <p style="font-size:13px;color:var(--text-muted);margin-top:14px">If something looks broken after a deploy, open <a href="https://vercel.com" target="_blank">vercel.com</a> (via GitHub login) and check the latest deployment. Green = live, Red = call Jorge.</p>
+  </section>
+
+  <!-- Repositories -->
+  <section class="section" id="repositories">
+    <div class="section-eyebrow">Code repositories</div>
+    <div class="section-header"><h2>GitHub Repositories</h2></div>
+    <div class="overflow-tbl">
+      <table class="tbl">
+        <thead><tr><th style="width:200px">Repository</th><th>What it contains</th><th>URL</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;color:var(--text)">torridonia</td>
+            <td>The main torridonia.com website — public site, admin panel, guest app, staff app, store, and API server</td>
+            <td class="route"><a href="https://github.com/Torridonia/torridonia" target="_blank">github.com/Torridonia/torridonia</a></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:var(--text)">torridonestate</td>
+            <td>The booking domain torridonestate.com — linked to Amenitiz, receives all booking traffic from "Book now" buttons</td>
+            <td class="route"><a href="https://github.com/Torridonia/torridonestate" target="_blank">github.com/Torridonia/torridonestate</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info" style="margin-top:16px">
+      <strong>You do not need to edit either repository directly.</strong> A developer makes all code changes. Your work stays in the Admin Panel at torridonia.com/admin.
+    </div>
+  </section>
+
+  <!-- Public routes -->
+  <section class="section" id="public-routes">
+    <div class="section-eyebrow">Site map</div>
+    <div class="section-header"><h2>Public Website Routes</h2></div>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:14px">All routes are on <a href="https://torridonia.com">torridonia.com</a>.</p>
+    <div class="overflow-tbl">
+      <table class="tbl">
+        <thead><tr><th style="width:200px">URL</th><th>Page</th></tr></thead>
+        <tbody>
+          <tr><td class="route">/</td><td>Homepage — estate intro, three experience cards</td></tr>
+          <tr><td class="route">/experiences/stay</td><td>Rooms and cottages with individual booking links</td></tr>
+          <tr><td class="route">/experiences/gather</td><td>Private events and in-house activities</td></tr>
+          <tr><td class="route">/experiences/create</td><td>Creative residency programme</td></tr>
+          <tr><td class="route">/life</td><td>Life at Torridonia — setting, family, volunteers</td></tr>
+          <tr><td class="route">/faq</td><td>Frequently asked questions</td></tr>
+          <tr><td class="route">/estate/rooms/:slug</td><td>Individual room page</td></tr>
+          <tr><td class="route">/estate/cottages/:slug</td><td>Individual cottage page</td></tr>
+          <tr><td class="route">/checkin/:room</td><td>Guest QR check-in</td></tr>
+          <tr><td class="route">/store</td><td>Maker's store</td></tr>
+          <tr><td class="route">/guest/:token</td><td>Private guest app — delivered by email after a confirmed booking</td></tr>
+          <tr><td class="route">/staff/login</td><td>Volunteer sign in / register</td></tr>
+          <tr><td class="route">/admin</td><td>Admin panel (requires login)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CREDENTIALS VAULT -->
+  <section class="section" id="vault">
+    <div class="section-eyebrow">Private — Felix &amp; Jorge only</div>
+    <div class="section-header"><h2>Credentials Vault</h2></div>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px">Passwords and access details for all Torridonia platforms. Stored privately — only visible when signed in as Felix or Jorge. Sign in below using your email to receive a one-time code.</p>
+
+    <div class="vault-wrapper">
+      <div class="vault-header">
+        <div class="vault-header-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="9" width="14" height="10" rx="2"/>
+            <path d="M7 9V6a3 3 0 0 1 6 0v3"/>
+          </svg>
+        </div>
+        <div class="vault-header-text">
+          <div class="title">Credentials Vault</div>
+          <div class="sub" id="vault-sub">Sign in with your authorized email to access</div>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="vault-loading" id="vault-loading">
+        <div class="spinner"></div>
+        <div>Checking authorization…</div>
+      </div>
+
+      <!-- Auth: email input -->
+      <div class="vault-panel" id="vault-auth-email" hidden>
+        <div class="panel-icon">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6" y="18" width="28" height="20" rx="3"/>
+            <path d="M13 18V13a7 7 0 0 1 14 0v5"/>
+          </svg>
+        </div>
+        <h3>Private Credentials</h3>
+        <p>This section is only accessible to Felix and Jorge.<br>Enter your authorized email to receive a one-time sign-in code.</p>
+        <div class="vault-form">
+          <label for="email-input">Your email</label>
+          <input type="email" id="email-input" placeholder="fvonracknitz@me.com or jorge.ibanez.ciej@gmail.com" autocomplete="email" />
+          <div class="vault-form-actions">
+            <button class="btn-primary-vault" id="btn-send-otp">Send sign-in code →</button>
+          </div>
+          <div class="vault-msg" id="email-msg"></div>
+        </div>
+      </div>
+
+      <!-- Auth: OTP input -->
+      <div class="vault-panel" id="vault-auth-otp" hidden>
+        <div class="panel-icon">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M32 8H8a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h24a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z"/>
+            <polyline points="6,10 20,22 34,10"/>
+          </svg>
+        </div>
+        <h3>Check your email</h3>
+        <p id="otp-sent-to">We sent a 6-digit code.</p>
+        <p style="margin-top:4px;font-size:12px;color:var(--text-faint)">Enter the code from the email to unlock the vault.</p>
+        <div class="vault-form">
+          <label for="otp-input">6-digit code</label>
+          <input type="text" id="otp-input" class="otp-input" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" />
+          <div class="vault-form-actions">
+            <button class="btn-primary-vault" id="btn-verify-otp">Verify code →</button>
+            <button class="btn-secondary-vault" id="btn-back-email">← Different email</button>
+            <button class="btn-secondary-vault" id="btn-resend-otp">Resend code</button>
+          </div>
+          <div class="vault-msg" id="otp-msg"></div>
+        </div>
+      </div>
+
+      <!-- Unauthorized -->
+      <div class="vault-panel" id="vault-unauthorized" hidden>
+        <div class="panel-icon" style="color:#A94040">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="20" cy="20" r="16"/>
+            <line x1="14" y1="14" x2="26" y2="26"/>
+            <line x1="26" y1="14" x2="14" y2="26"/>
+          </svg>
+        </div>
+        <h3>Not Authorized</h3>
+        <p>This email is not authorized to access the Credentials Vault.</p>
+        <p style="margin-top:6px">Only Felix (fvonracknitz@me.com) and Jorge (jorge.ibanez.ciej@gmail.com) have access.</p>
+        <div style="margin-top:16px">
+          <button class="btn-primary-vault" id="btn-try-again" style="display:inline-block;width:auto;padding:9px 20px">Try a different email</button>
+        </div>
+      </div>
+
+      <!-- Open (authorized) -->
+      <div class="vault-body" id="vault-open" hidden>
+        <div class="vault-body-header">
+          <h4 id="vault-user-label">Credentials</h4>
+          <button class="btn-signout" id="btn-signout">Sign out</button>
+        </div>
+        <div class="cred-list" id="cred-list">
+          <div style="color:var(--text-muted);font-size:13px;padding:20px;text-align:center">Loading credentials…</div>
+        </div>
+        <div class="vault-add">
+          <button class="btn-add" id="btn-add-cred">+ Add credential</button>
+          <div class="add-form" id="add-form" hidden>
+            <strong style="font-size:13px;color:var(--text)">Add new credential</strong>
+            <div class="add-form-grid">
+              <div class="form-row">
+                <label>Platform name</label>
+                <input type="text" id="new-platform" placeholder="e.g. Amenitiz" />
+              </div>
+              <div class="form-row">
+                <label>Login URL</label>
+                <input type="text" id="new-url" placeholder="https://app.example.com" />
+              </div>
+              <div class="form-row">
+                <label>Email / Username</label>
+                <input type="text" id="new-username" placeholder="e.g. bookings@torridonia.com" />
+              </div>
+              <div class="form-row">
+                <label>Password</label>
+                <input type="password" id="new-password" placeholder="Password" />
+              </div>
+            </div>
+            <div class="form-row">
+              <label>Login method</label>
+              <select id="new-method">
+                <option value="own">Own email + password</option>
+                <option value="google">Sign in with Google</option>
+                <option value="github">Sign in with GitHub</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Notes</label>
+              <textarea id="new-notes" placeholder="Any additional notes (recovery email, 2FA, etc.)"></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="btn-cancel" id="btn-add-cancel">Cancel</button>
+              <button class="btn-save" id="btn-add-save">Save credential</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QR Code -->
+  <section class="section" id="qr">
+    <div class="section-eyebrow">Quick access</div>
+    <div class="section-header"><h2>QR Code — Share this Guide</h2></div>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px">Scan this QR code with any phone camera to open the Operations Guide. Print it and keep it somewhere accessible — the credentials vault requires a separate sign-in and is safe to share the URL for.</p>
+    <div class="qr-section">
+      <div class="qr-box">
+        <div id="qr-main-canvas"></div>
+      </div>
+      <div class="qr-info">
+        <h4>Torridonia Operations Guide</h4>
+        <p>This QR code encodes the direct link to this page. Anyone who scans it lands here — the credentials vault remains locked behind email verification.</p>
+        <div class="qr-url" id="qr-url-display">https://guests.torridonia.com/ops/</div>
+        <div class="qr-actions">
+          <button class="qr-btn" id="btn-download-qr">Download QR</button>
+          <button class="qr-btn-outline" id="btn-copy-url">Copy link</button>
+        </div>
+        <div class="vault-msg" id="qr-action-msg" style="text-align:left;margin-top:6px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pending activations -->
+  <section class="section" id="pending">
+    <div class="section-eyebrow">Before full launch</div>
+    <div class="section-header"><h2>Pending Activations</h2></div>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:14px">These are the remaining steps to bring the platform to full capacity. All items are prepared — they just need credentials or a small manual step.</p>
+    <ul class="cl">
+      <li>
+        <span class="cl-n">1</span>
+        <div class="cl-b"><strong>Volunteer database migration</strong> Run one SQL command in Supabase (Jorge handles this). Required before volunteer self-service sign-up works fully.</div>
+        <span class="chip chip-pend" style="white-space:nowrap">Pending</span>
+      </li>
+      <li>
+        <span class="cl-n">2</span>
+        <div class="cl-b"><strong>Stripe (custom payment engine)</strong> When activated, "Book now" buttons will redirect to a custom checkout on torridonia.com instead of Amenitiz. Currently Amenitiz handles all payments — this is fine for now.</div>
+        <span class="chip chip-pend" style="white-space:nowrap">Pending</span>
+      </li>
+      <li>
+        <span class="cl-n">3</span>
+        <div class="cl-b"><strong>Resend (automated emails)</strong> Booking confirmations, review request emails, and team alert emails are built but not yet sending. Requires an API key setup by Jorge.</div>
+        <span class="chip chip-pend" style="white-space:nowrap">Pending</span>
+      </li>
+      <li>
+        <span class="cl-n">4</span>
+        <div class="cl-b"><strong>Google Place ID (review redirect)</strong> When a guest leaves a 4-star or above review through the guest app, they should be redirected to your Google review page. This needs the Google Maps Place ID for Torridonia Estate.</div>
+        <span class="chip chip-pend" style="white-space:nowrap">Pending</span>
+      </li>
+      <li>
+        <span class="cl-n">5</span>
+        <div class="cl-b"><strong>Cottage booking deep-links</strong> Individual Amenitiz URLs for Lochside, Corry Lodge, Gardeners, and Stables cottages — once Amenitiz generates them, tell Jorge to add them to the website code.</div>
+        <span class="chip chip-pend" style="white-space:nowrap">Pending</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Security rules -->
+  <section class="section" id="security">
+    <div class="section-eyebrow">Critical rules</div>
+    <div class="section-header"><h2>Security Rules</h2></div>
+    <ul class="rule-list">
+      <li>
+        <div class="ri warn">!</div>
+        <div><strong>Never share the Supabase service key with anyone outside Jorge and a developer.</strong> This key has full database access. It lives only on the server — never in an email or on a computer desktop.</div>
+      </li>
+      <li>
+        <div class="ri warn">!</div>
+        <div><strong>The admin password for bookings@torridonia.com is the master key.</strong> If this password is compromised, change it immediately in Google Workspace and notify Jorge — it will lock everything out of GitHub and Cloudflare automatically.</div>
+      </li>
+      <li>
+        <div class="ri warn">!</div>
+        <div><strong>A booking is only confirmed when the guest pays — never manually.</strong> Do not mark a booking as "Confirmed" in the admin panel by hand. Only the payment webhook does this. This protects against double-bookings.</div>
+      </li>
+      <li>
+        <div class="ri ok">&#10003;</div>
+        <div><strong>Volunteers cannot access admin functions.</strong> Volunteers sign in at <code>/staff/login</code> and see only their rota and SOPs. Their account gives them zero access to the admin panel, bookings, or financial records.</div>
+      </li>
+      <li>
+        <div class="ri ok">&#10003;</div>
+        <div><strong>The database is locked to anonymous access.</strong> Even if the admin link were shared publicly, the database refuses all requests that don't carry a verified login. There are no public holes in the data layer.</div>
+      </li>
+    </ul>
+  </section>
+
+  <footer style="margin-top:40px;padding-top:22px;border-top:1px solid var(--border);font-size:12px;color:var(--text-faint);line-height:1.7">
+    Torridonia Estate · Torridon, Scottish Highlands · torridonia.com · For Felix von Racknitz and authorised team members · September 2026
+  </footer>
+
+</main>
+</div>
+
+<script>
+// ── Config ──────────────────────────────────────────────────────────────────
+const SUPABASE_URL  = 'https://yskzkobduekupiobrbxr.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlza3prb2JkdWVrdXBpb2JyYnhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NjAxNjAsImV4cCI6MjA5MDEzNjE2MH0.5t6mm90F7k_8zXVVzUJAYzFA4IoNdTm6-UTRWFzsjfg';
+const AUTHORIZED    = ['jorge.ibanez.ciej@gmail.com', 'fvonracknitz@me.com'];
+const PAGE_URL      = 'https://guests.torridonia.com/ops/';
+
+const METHOD_LABELS = { own: 'Own email + password', google: 'Sign in with Google', github: 'Sign in with GitHub' };
+const ICON_COLORS   = {
+  'google-workspace': '#3B5BDB', 'amenitiz': '#C2590A', 'worldpackers': '#2E7D32',
+  'siteground': '#8B5A00', 'github-torridonia': '#2A2A3A', 'github-torridonestate': '#2A2A3A',
+  'cloudflare': '#8B6A00', 'vercel': '#1A1A1A', 'supabase': '#1A6B4A', 'torridonia-admin': '#1A2E28'
+};
+
+// ── State ───────────────────────────────────────────────────────────────────
+let db, currentUser;
+let credentials    = [];
+let editingId      = null;
+let showingPw      = {};
+let pendingEmail   = '';
+
+// ── Init ────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  } catch (e) {
+    showPanel('auth-email');
+    return;
+  }
+
+  db.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      handleSession(session);
+    } else if (event === 'SIGNED_OUT') {
+      currentUser = null;
+      showPanel('auth-email');
+    }
+  });
+
+  db.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      handleSession(session);
+    } else {
+      showPanel('auth-email');
+    }
+  });
+
+  setupAuthUI();
+  setupVaultUI();
+  generateQR();
+  setupSidebarQR();
+});
+
+// ── Auth ────────────────────────────────────────────────────────────────────
+function handleSession(session) {
+  const email = session.user?.email?.toLowerCase() || '';
+  if (AUTHORIZED.includes(email)) {
+    currentUser = session.user;
+    document.getElementById('vault-sub').textContent = 'Signed in as ' + email;
+    document.getElementById('vault-user-label').textContent = 'Credentials — ' + email;
+    showPanel('open');
+    loadCredentials();
+  } else {
+    db.auth.signOut();
+    showPanel('unauthorized');
+  }
+}
+
+function showPanel(name) {
+  const panels = ['loading', 'auth-email', 'auth-otp', 'unauthorized', 'open'];
+  panels.forEach(p => {
+    const el = document.getElementById('vault-' + p);
+    if (el) el.hidden = (p !== name);
+  });
+}
+
+function setupAuthUI() {
+  // Send OTP
+  document.getElementById('btn-send-otp').addEventListener('click', sendOTP);
+  document.getElementById('email-input').addEventListener('keydown', e => { if (e.key === 'Enter') sendOTP(); });
+
+  // Verify OTP
+  document.getElementById('btn-verify-otp').addEventListener('click', verifyOTP);
+  document.getElementById('otp-input').addEventListener('keydown', e => { if (e.key === 'Enter') verifyOTP(); });
+  document.getElementById('otp-input').addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+  });
+
+  // Back / resend
+  document.getElementById('btn-back-email').addEventListener('click', () => {
+    showPanel('auth-email');
+    document.getElementById('email-msg').textContent = '';
+  });
+  document.getElementById('btn-resend-otp').addEventListener('click', () => {
+    if (pendingEmail) sendOTP(pendingEmail);
+  });
+
+  // Try again after unauthorized
+  document.getElementById('btn-try-again').addEventListener('click', () => showPanel('auth-email'));
+
+  // Sign out
+  document.getElementById('btn-signout').addEventListener('click', async () => {
+    await db.auth.signOut();
+  });
+}
+
+async function sendOTP(emailArg) {
+  const email = (typeof emailArg === 'string' ? emailArg : document.getElementById('email-input').value).trim().toLowerCase();
+  const msgEl = document.getElementById('email-msg');
+  msgEl.textContent = '';
+  msgEl.className = 'vault-msg';
+
+  if (!email) { msgEl.textContent = 'Please enter your email address.'; msgEl.classList.add('err'); return; }
+  if (!AUTHORIZED.includes(email)) {
+    msgEl.textContent = 'This email is not authorized to access the vault.';
+    msgEl.classList.add('err');
+    return;
+  }
+
+  const btn = document.getElementById('btn-send-otp');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  const { error } = await db.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+
+  btn.textContent = 'Send sign-in code →';
+  btn.disabled = false;
+
+  if (error) {
+    msgEl.textContent = 'Failed to send code: ' + error.message;
+    msgEl.classList.add('err');
+    return;
+  }
+
+  pendingEmail = email;
+  document.getElementById('otp-sent-to').textContent = 'We sent a 6-digit code to ' + email + '.';
+  document.getElementById('otp-msg').textContent = '';
+  document.getElementById('otp-input').value = '';
+  showPanel('auth-otp');
+  setTimeout(() => document.getElementById('otp-input').focus(), 100);
+}
+
+async function verifyOTP() {
+  const token = document.getElementById('otp-input').value.trim();
+  const msgEl = document.getElementById('otp-msg');
+  msgEl.textContent = '';
+  msgEl.className = 'vault-msg';
+
+  if (token.length !== 6) { msgEl.textContent = 'Please enter the full 6-digit code.'; msgEl.classList.add('err'); return; }
+
+  const btn = document.getElementById('btn-verify-otp');
+  btn.textContent = 'Verifying…';
+  btn.disabled = true;
+
+  const { error } = await db.auth.verifyOtp({ email: pendingEmail, token, type: 'email' });
+
+  btn.textContent = 'Verify code →';
+  btn.disabled = false;
+
+  if (error) {
+    msgEl.textContent = 'Invalid or expired code. Please check your email and try again.';
+    msgEl.classList.add('err');
+  }
+  // onAuthStateChange handles success
+}
+
+// ── Credentials ─────────────────────────────────────────────────────────────
+async function loadCredentials() {
+  const { data, error } = await db.from('ops_credentials').select('*').order('sort_order');
+  if (error) { console.error('Load error:', error); return; }
+  credentials = data || [];
+  renderCredentials();
+}
+
+function renderCredentials() {
+  const list = document.getElementById('cred-list');
+  if (!list) return;
+  if (!credentials.length) {
+    list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:20px;text-align:center">No credentials found.</div>';
+    return;
+  }
+  list.innerHTML = credentials.map(credCard).join('');
+
+  list.querySelectorAll('.btn-edit').forEach(btn => btn.addEventListener('click', () => startEdit(btn.dataset.id)));
+  list.querySelectorAll('.btn-pw').forEach(btn => btn.addEventListener('click', () => togglePw(btn.dataset.id)));
+  list.querySelectorAll('.btn-save-edit').forEach(btn => btn.addEventListener('click', () => saveEdit(btn.dataset.id)));
+  list.querySelectorAll('.btn-cancel-edit').forEach(btn => btn.addEventListener('click', () => cancelEdit()));
+}
+
+function credCard(c) {
+  const abbr  = (c.platform || '').slice(0, 2).toUpperCase();
+  const color = ICON_COLORS[c.id] || 'var(--text-muted)';
+  const hasPw = c.password && c.password.length > 0;
+  const pwHidden = !showingPw[c.id];
+  const isEditing = editingId === c.id;
+
+  return `<div class="cred-card" id="card-${c.id}">
+    <div class="cred-card-head">
+      <div class="cred-card-icon" style="color:${color}">${abbr}</div>
+      <div class="cred-card-title">
+        <div class="cname">${esc(c.platform)}</div>
+        <div class="cmethod">${METHOD_LABELS[c.method] || 'Own password'}</div>
+      </div>
+      <div class="cred-card-actions">
+        ${c.method !== 'own' ? `<span class="chip chip-via" style="font-size:10px">${METHOD_LABELS[c.method] || ''}</span>` : ''}
+        <button class="btn-icon btn-edit" data-id="${c.id}">Edit</button>
+      </div>
+    </div>
+    <div class="cred-card-body">
+      <span class="cred-field-label">URL</span>
+      <span class="cred-field-value"><a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.url)}</a></span>
+      <span class="cred-field-label">Login</span>
+      <span class="cred-field-value">${c.username ? esc(c.username) : '<em style="color:var(--text-faint)">not set</em>'}</span>
+      ${c.method === 'own' ? `<span class="cred-field-label">Password</span>
+      <span class="cred-field-value">
+        ${hasPw
+          ? (pwHidden
+              ? `<span class="pw-dots">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</span><button class="pw-toggle btn-pw" data-id="${c.id}">Show</button>`
+              : `<span style="user-select:all">${esc(c.password)}</span><button class="pw-toggle btn-pw" data-id="${c.id}">Hide</button>`)
+          : '<span class="cred-empty-note">not set — click Edit to add</span>'
+        }
+      </span>` : ''}
+      ${c.notes ? `<span class="cred-notes">${esc(c.notes)}</span>` : ''}
+    </div>
+    ${isEditing ? editForm(c) : ''}
+  </div>`;
+}
+
+function editForm(c) {
+  return `<div class="cred-edit-form">
+    <div class="add-form-grid">
+      <div class="form-row"><label>Login email / username</label><input type="text" id="edit-username-${c.id}" value="${esc(c.username || '')}" /></div>
+      <div class="form-row"><label>Password</label><input type="password" id="edit-password-${c.id}" value="${esc(c.password || '')}" placeholder="Enter or update password" /></div>
+      <div class="form-row"><label>URL</label><input type="text" id="edit-url-${c.id}" value="${esc(c.url || '')}" /></div>
+      <div class="form-row"><label>Login method</label>
+        <select id="edit-method-${c.id}">
+          <option value="own" ${c.method==='own'?'selected':''}>Own email + password</option>
+          <option value="google" ${c.method==='google'?'selected':''}>Sign in with Google</option>
+          <option value="github" ${c.method==='github'?'selected':''}>Sign in with GitHub</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row"><label>Notes</label><textarea id="edit-notes-${c.id}">${esc(c.notes || '')}</textarea></div>
+    <div class="form-actions">
+      <span class="save-status" id="save-status-${c.id}"></span>
+      <button class="btn-cancel btn-cancel-edit" data-id="${c.id}">Cancel</button>
+      <button class="btn-save btn-save-edit" data-id="${c.id}">Save</button>
+    </div>
+  </div>`;
+}
+
+function startEdit(id) {
+  editingId = id;
+  renderCredentials();
+  const el = document.getElementById(`edit-username-${id}`);
+  if (el) el.focus();
+}
+
+function cancelEdit() {
+  editingId = null;
+  renderCredentials();
+}
+
+async function saveEdit(id) {
+  const username = document.getElementById(`edit-username-${id}`)?.value.trim() || '';
+  const password = document.getElementById(`edit-password-${id}`)?.value || '';
+  const url      = document.getElementById(`edit-url-${id}`)?.value.trim() || '';
+  const method   = document.getElementById(`edit-method-${id}`)?.value || 'own';
+  const notes    = document.getElementById(`edit-notes-${id}`)?.value.trim() || '';
+  const statusEl = document.getElementById(`save-status-${id}`);
+
+  if (statusEl) { statusEl.textContent = 'Saving…'; statusEl.className = 'save-status'; }
+
+  const { error } = await db.from('ops_credentials')
+    .update({ username, password, url, method, notes, updated_at: new Date().toISOString() })
+    .eq('id', id);
+
+  if (error) {
+    if (statusEl) { statusEl.textContent = 'Error: ' + error.message; statusEl.className = 'save-status err'; }
+    return;
+  }
+
+  const idx = credentials.findIndex(c => c.id === id);
+  if (idx !== -1) Object.assign(credentials[idx], { username, password, url, method, notes });
+
+  editingId = null;
+  renderCredentials();
+}
+
+function togglePw(id) {
+  showingPw[id] = !showingPw[id];
+  renderCredentials();
+}
+
+function setupVaultUI() {
+  document.getElementById('btn-add-cred').addEventListener('click', () => {
+    document.getElementById('add-form').hidden = !document.getElementById('add-form').hidden;
+  });
+  document.getElementById('btn-add-cancel').addEventListener('click', () => {
+    document.getElementById('add-form').hidden = true;
+  });
+  document.getElementById('btn-add-save').addEventListener('click', saveNewCredential);
+}
+
+async function saveNewCredential() {
+  const platform = document.getElementById('new-platform').value.trim();
+  if (!platform) return;
+
+  const entry = {
+    id:         'custom-' + Date.now(),
+    platform,
+    url:        document.getElementById('new-url').value.trim(),
+    username:   document.getElementById('new-username').value.trim(),
+    password:   document.getElementById('new-password').value,
+    method:     document.getElementById('new-method').value,
+    notes:      document.getElementById('new-notes').value.trim(),
+    sort_order: 99,
+    updated_at: new Date().toISOString()
+  };
+
+  const btn = document.getElementById('btn-add-save');
+  btn.textContent = 'Saving…';
+  btn.disabled = true;
+
+  const { data, error } = await db.from('ops_credentials').insert(entry).select().single();
+
+  btn.textContent = 'Save credential';
+  btn.disabled = false;
+
+  if (error) { alert('Error saving: ' + error.message); return; }
+
+  credentials.push(data || entry);
+  document.getElementById('add-form').hidden = true;
+  ['new-platform','new-url','new-username','new-password','new-notes'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  renderCredentials();
+}
+
+// ── QR Code ──────────────────────────────────────────────────────────────────
+function generateQR() {
+  const url = PAGE_URL;
+  document.getElementById('qr-url-display').textContent = url;
+
+  ['qr-main-canvas', 'sidebar-qr-canvas'].forEach((elId, i) => {
+    const el = document.getElementById(elId);
+    if (!el || typeof QRCode === 'undefined') return;
+    el.innerHTML = '';
+    new QRCode(el, {
+      text: url,
+      width: i === 0 ? 160 : 120,
+      height: i === 0 ? 160 : 120,
+      colorDark: '#1A2E28',
+      colorLight: '#F8F4EC',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  });
+
+  // Download button
+  document.getElementById('btn-download-qr').addEventListener('click', () => {
+    const canvas = document.querySelector('#qr-main-canvas canvas');
+    if (!canvas) return;
+    const a = document.createElement('a');
+    a.download = 'torridonia-ops-qr.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  });
+
+  // Copy URL button
+  document.getElementById('btn-copy-url').addEventListener('click', async () => {
+    const msgEl = document.getElementById('qr-action-msg');
+    try {
+      await navigator.clipboard.writeText(url);
+      msgEl.textContent = 'Link copied to clipboard.';
+      msgEl.className = 'vault-msg ok';
+    } catch {
+      msgEl.textContent = url;
+      msgEl.className = 'vault-msg';
+    }
+    setTimeout(() => { msgEl.textContent = ''; }, 3000);
+  });
+}
+
+function setupSidebarQR() {
+  const btn  = document.getElementById('btn-sidebar-qr');
+  const wrap = document.getElementById('sidebar-qr-wrap');
+  if (!btn || !wrap) return;
+  btn.addEventListener('click', () => {
+    wrap.classList.toggle('open');
+    btn.textContent = wrap.classList.contains('open') ? 'Hide QR' : 'Show QR';
+  });
+}
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+
+</body>
+</html>
